@@ -5,7 +5,7 @@
     <record id="estate_property_action" model="ir.actions.act_window">
       <field name="name">Properties</field>
       <field name="res_model">estate.property</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,kanban</field>
       <field name="context">{'search_default_available': True}</field>
     </record>
 
@@ -26,6 +26,38 @@
           <field name="state" invisible="1" />
           <field name="date_availability" optional="hide"/>
         </tree>
+      </field>
+    </record>
+
+    <record id="estate_property_view_kanban" model="ir.ui.view">
+      <field name="name">estate.property.kanban</field>
+      <field name="model">estate.property</field>
+      <field name="arch" type="xml">
+        <kanban default_group_by="property_type_id" records_draggable="false" class="mb-1">
+          <field name="state"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click">
+                <h4>
+                  <field name="name"/>
+                </h4>
+                <div>
+                  <label for="expected_price" class="o_form_label me-1">Expected price:</label>
+                  <field name="expected_price"/>
+                </div>
+                <div t-if="record.state.raw_value == 'of_rec'">
+                  <label for="best_price" class="o_form_label me-1">Best offer:</label>
+                  <field name="best_price"/>
+                </div>
+                <div t-if="record.state.raw_value == 'of_acc'">
+                  <label for="selling_price" class="o_form_label me-1">Selling price:</label>
+                  <field name="selling_price"/>
+                </div>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+              </div>
+            </t>
+          </templates>
+        </kanban>
       </field>
     </record>
 
@@ -57,7 +89,7 @@
       <field name="arch" type="xml">
         <form string="Properties">
           <header>
-            <button class="btn btn-primary" name="action_sold" type="object" states="new,of_rec,of_acc"  string="Sold"/>
+            <button class="btn btn-primary" name="action_sold" type="object" states="new,of_rec,of_acc" string="Sold"/>
             <button name="action_cancel" type="object" states="new,of_rec" string="Cancel"/>
             <field name="state" widget="statusbar" statusbar_visible="new,of_rec,of_acc,sold"/>
           </header>
