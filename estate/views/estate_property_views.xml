@@ -57,8 +57,8 @@
       <field name="arch" type="xml">
         <form string="Properties">
           <header>
-            <button name="action_sell_property" type="object" states="new,of_rec,of_acc"  string="Sold"/>
-            <button name="action_cancel_property" type="object" states="new,of_rec" string="Cancel"/>
+            <button class="btn btn-primary" name="action_sold" type="object" states="new,of_rec,of_acc"  string="Sold"/>
+            <button name="action_cancel" type="object" states="new,of_rec" string="Cancel"/>
             <field name="state" widget="statusbar" statusbar_visible="new,of_rec,of_acc,sold"/>
           </header>
           <sheet>

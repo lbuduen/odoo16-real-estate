@@ -61,9 +61,11 @@ class EstatePropertyOffer(models.Model):
             vals['property_id'])
         decimal_precision = self.env['decimal.precision'].precision_get(
             'Estate price')
-        max_price_offer = max(estate_property_obj.offer_ids.mapped('price'))
-        if float_compare(vals['price'], max_price_offer, precision_digits=decimal_precision) < 0:
-            raise UserError(
-                _('The offer must be higher than {:.{}f}'.format(max_price_offer, decimal_precision)))
+        offer_price_list = estate_property_obj.offer_ids.mapped('price')
+        if len(offer_price_list):
+            max_price_offer = max(offer_price_list)
+            if float_compare(vals['price'], max_price_offer, precision_digits=decimal_precision) < 0:
+                raise UserError(
+                    _('The offer must be higher than {:.{}f}'.format(max_price_offer, decimal_precision)))
         estate_property_obj.state = 'of_rec'
         return super().create(vals)

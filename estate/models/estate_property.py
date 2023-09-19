@@ -67,7 +67,7 @@ class EstateProperty(models.Model):
     tag_ids = fields.Many2many('estate.property.tag', string='Tags')
     offer_ids = fields.One2many(
         "estate.property.offer", "property_id", string="Offers", ondelete='cascade')
-    offers_count = fields.Integer('Offers', compute="_compute_offers_data")
+    offers_count = fields.Integer('Offers count', compute="_compute_offers_data")
     offers_accepted = fields.Boolean(
         'Offers accepted', compute="_compute_offers_data")
 
@@ -101,14 +101,14 @@ class EstateProperty(models.Model):
             self.garden_area = 0
             self.garden_orientation = ''
 
-    def action_sell_property(self):
+    def action_sold(self):
         for record in self:
             if record.state == 'canceled':
                 raise UserError(_('Canceled properties cannot be sold'))
             record.state = 'sold'
         return True
 
-    def action_cancel_property(self):
+    def action_cancel(self):
         for record in self:
             if record.state == 'sold':
                 raise UserError(_('Sold properties cannot be canceled'))
